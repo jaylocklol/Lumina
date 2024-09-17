@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina</title>
+
+    <!-- Link to Google Fonts for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Resetting default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #381019, #5e1b2b, #972c44, #bd3756);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: white;
+        }
+
+        /* Background animation */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li a i {
+            margin-right: 8px;
+        }
+
+        nav ul li a:hover {
+            color: #bd3756;
+            text-decoration: underline;
+        }
+
+        /* Responsive Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Lumina Icon with Text */
+        .logo {
+            margin-bottom: 20px;
+            width: 300px;
+            height: 150px;
+            background: url('https://raw.githubusercontent.com/jaylocklol/Lumina/main/assets/pngs/luminatxticon.png') no-repeat center;
+            background-size: contain;
+        }
+
+        /* Adjust for mobile */
+        @media (max-width: 768px) {
+            .logo {
+                width: 250px;
+                height: 125px;
+            }
+        }
+
+        /* Styling for the typewriter text */
+        .quotes {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #bd3756; /* Light color for contrast */
+            margin-top: 20px;
+            min-height: 2rem; /* Ensures a consistent height for the text container */
+        }
+
+        /* Adjust font-size for smaller screens */
+        @media (max-width: 768px) {
+            .quotes {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Typewriter animation */
+        .typewriter-text {
+            border-right: 2px solid #bd3756;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Blinking cursor */
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Ꮇàⅰn</a></li>
+            <li><a href="algebrapractice.html"><i class="fas fa-gamepad"></i> Ꮐáⅿëѕ</a></li>
+            <li><a href="biologytest.html"><i class="fas fa-th-large"></i> Åρρѕ</a></li>
+            <li><a href="proxy.html"><i class="fas fa-shield-alt"></i> Ꮲrоⅹу</a></li>
+            <li><a href="historyfacts.html"><i class="fas fa-bookmark"></i> Βоοκⅿаʀκⅼëτѕ</a></li>
+        </ul>
+    </nav>
+
+    <!-- Container to center content -->
+    <div class="container">
+        <!-- Lumina Icon with Text -->
+        <div class="logo"></div>
+
+        <!-- Container for Quotes -->
+        <div class="quotes">
+            <span id="quote" class="typewriter-text">&nbsp;</span>
+        </div>
+    </div>
+
+    <script>
+        // Array of Quotes
+        const quotes = [
+            "“My dog got ran over by a car” - terocylia",
+            "\"cats are cute\" - matt",
+            "\"school sucks\" - bloom",
+            "\"poo always travels slowly through your system\" - cianan",
+            "\"wowzers! cool\" - iodine",
+            "\"something silly\" - aizen",
+            "\"balls\" - taylor",
+            "\"the internet is for all\" - jail",
+            "\"skibidi rizz i’ve got ur clizz\" - hannah",
+            "\"beans grazin\" - amelia",
+            "“Born a sigma always a sigma 🐺” - autumn"
+        ];
+
+        // Function to type out each quote character by character
+        let quoteIndex = 0;
+        let charIndex = 0;
+        let typingSpeed = 100; // Adjust this value to make the typing speed feel more human
+        let deletingSpeed = 50; // Adjust this value for deleting speed
+        let pauseBetweenQuotes = 2000; // Pause between each quote after typing is complete
+
+        const quoteElement = document.getElementById('quote');
+
+        // Typing Effect Function
+        function typeQuote() {
+            const currentQuote = quotes[quoteIndex];
+
+            if (charIndex < currentQuote.length) {
+                quoteElement.textContent = currentQuote.substring(0, charIndex + 1); // Add next character
+                charIndex++;
+                setTimeout(typeQuote, typingSpeed);
+            } else {
+                // Pause before deleting the quote
+                setTimeout(deleteQuote, pauseBetweenQuotes);
+            }
+        }
+
+        // Deleting Effect Function
+        function deleteQuote() {
+            const currentQuote = quotes[quoteIndex];
+
+            if (charIndex > 0) {
+                quoteElement.textContent = currentQuote.substring(0, charIndex - 1); // Remove character
+                charIndex--;
+                setTimeout(deleteQuote, deletingSpeed);
+            } else {
+                // Once everything is deleted, put an invisible space in the container to prevent shrinking
+                quoteElement.innerHTML = '&nbsp;';
+                
+                // Move to the next quote
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                setTimeout(typeQuote, typingSpeed);
+            }
+        }
+
+        // Start typing the first quote immediately
+        typeQuote();
+    </script>
+
+</body>
+</html>
