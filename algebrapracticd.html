@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina - Games</title>
+
+    <!-- Link to Google Fonts for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Resetting default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            padding: 20px;
+            background: linear-gradient(45deg, #381019, #5e1b2b, #972c44, #bd3756);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Background animation */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        /* Desktop menu */
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li a i {
+            margin-right: 8px;
+        }
+
+        nav ul li a:hover {
+            color: #bd3756;
+            text-decoration: underline;
+        }
+
+        /* Hamburger menu for mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 2rem;
+            color: white;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+
+        /* Responsive menu (for mobile devices) */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 60px;
+                width: 100%;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.9);
+                display: none; /* Hidden by default */
+            }
+
+            nav ul.show {
+                display: flex; /* Show when hamburger is clicked */
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .hamburger {
+                display: block; /* Show hamburger menu on mobile */
+            }
+        }
+
+        /* Container for game cubes */
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding-top: 80px; /* To avoid overlap with the navigation bar */
+            position: relative;
+        }
+
+        /* Game cube styling */
+        .game-cube {
+            width: 100%;
+            height: 150px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .game-cube.recommended {
+            height: 200px;
+        }
+
+        .game-cube:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            filter: brightness(0.7);
+        }
+
+        .game-cube:hover .game-name {
+            opacity: 1;
+        }
+
+        /* Overlay for game name */
+        .game-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Fullscreen iframe styling */
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .fullscreen iframe {
+            width: 90%;
+            height: 90%;
+            border: none;
+        }
+
+        .fullscreen .loading {
+            position: absolute;
+            font-size: 2rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .fullscreen .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .fullscreen .close-btn:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .fullscreen .close-btn::before {
+            content: '\00d7'; /* Unicode for '×' */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Search Bar Styling */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 80px auto 20px; /* Margin adjusted to avoid overlap */
+            max-width: 600px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #bd3756;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-container button:hover {
+            background-color: #972c44;
+        }
+
+        /* Random Game Button */
+        .random-game-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #bd3756;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .random-game-btn:hover {
+            background-color: #972c44;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Menu -->
+    <nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul id="menu-items">
+            <li><a href="index.html"><i class="fas fa-home"></i> Main</a></li>
+            <li><a href="algebrapractice.html"><i class="fas fa-gamepad"></i> Games</a></li>
+            <li><a href="biologytest.html"><i class="fas fa-th-large"></i> Apps</a></li>
+            <li><a href="proxy.html"><i class="fas fa-shield-alt"></i> Proxy</a></li>
+            <li><a href="historyfacts.html"><i class="fas fa-bookmark"></i> Bookmarklets</a></li>
+        </ul>
+    </nav>
+
+    <!-- Search Bar and Random Game Button -->
+    <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Search for games...">
+        <button onclick="filterGames()">Search</button>
+    </div>
+    <button class="random-game-btn" onclick="loadRandomGame()">Random Game</button>
+
+    <!-- Container for game cubes -->
+    <div class="games-container" id="games-container">
+        <!-- Game cubes will be inserted here by JavaScript -->
+    </div>
+
+    <!-- Fullscreen iframe container -->
+    <div class="fullscreen" id="fullscreen">
+        <div class="loading" id="loading">Loading...</div>
+        <iframe id="game-frame"></iframe>
+        <button class="close-btn" id="close-btn"></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gamesContainer = document.getElementById('games-container');
+            const fullscreen = document.getElementById('fullscreen');
+            const gameFrame = document.getElementById('game-frame');
+            const loading = document.getElementById('loading');
+            const closeBtn = document.getElementById('close-btn');
+            const searchBar = document.getElementById('search-bar');
+
+            let games = [];
+
+            // Fetch and parse the CSV file
+            fetch('https://raw.githubusercontent.com/jaylocklol/Lumina/main/assets/g.csv')
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.trim().split('\n').slice(1);
+                    games = rows.map(row => {
+                        const [name, image, directory, recommended] = row.split(',');
+                        return { name, image: image || 'https://raw.githubusercontent.com/jaylocklol/Lumina/main/assets/pngs/placeholder.png', directory, recommended };
+                    });
+                    displayGames(games);
+                });
+
+            // Display games in grid
+            function displayGames(gameList) {
+                gamesContainer.innerHTML = '';
+                gameList.forEach(game => {
+                    const cube = document.createElement('div');
+                    cube.classList.add('game-cube');
+                    if (game.recommended === '1') cube.classList.add('recommended');
+                    cube.style.backgroundImage = `url(${game.image})`;
+                    cube.innerHTML = `<div class="game-name">${game.name}</div>`;
+                    cube.dataset.url = game.directory;
+                    cube.dataset.name = game.name;
+                    cube.addEventListener('click', () => showGame(game.directory, game.name));
+                    gamesContainer.appendChild(cube);
+                });
+            }
+
+            // Show fullscreen iframe with loading screen
+            function showGame(url, name) {
+                loading.textContent = `Loading ${name}...`;
+                fullscreen.style.display = 'flex';
+                setTimeout(() => {
+                    loading.textContent = '';
+                    gameFrame.src = url;
+                }, 2000);
+            }
+
+            // Close fullscreen iframe
+            closeBtn.addEventListener('click', () => {
+                fullscreen.style.display = 'none';
+                gameFrame.src = '';
+            });
+
+            // Filter games based on search input
+            function filterGames() {
+                const query = searchBar.value.toLowerCase();
+                const filteredGames = games.filter(game => game.name.toLowerCase().includes(query));
+                displayGames(filteredGames);
+            }
+
+            // Load a random game
+            function loadRandomGame() {
+                if (games.length > 0) {
+                    const randomGame = games[Math.floor(Math.random() * games.length)];
+                    showGame(randomGame.directory, randomGame.name);
+                }
+            }
+
+            searchBar.addEventListener('input', filterGames);
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu-items');
+            menu.classList.toggle('show');
+        }
+    </script>
+
+</body>
+</html>
